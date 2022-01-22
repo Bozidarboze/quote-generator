@@ -11,9 +11,10 @@ export interface IQuotes {
 }
 
 const QuoteCard = () => {
-  const [quote, setQuote] = useState("Twitter Quote Generator!");
-  const [author, setAuthor] = useState("Try it out!");
+  const [quote, setQuote] = useState("");
+  const [author, setAuthor] = useState("");
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
   const [quotes, setQuotes] = useState<IQuotes[]>([]);
 
   const fetchQuotes = () => {
@@ -23,14 +24,18 @@ const QuoteCard = () => {
         setQuotes(data);
         setLoading(false);
       })
-      .catch(() => {
-        console.log("Failed to fetch quotes, retrying...");
-        fetchQuotes();
+      .catch((err) => {
+        console.log(err);
+        setFailed(true);
       });
   };
 
   // eslint-disable-next-line
   useEffect(() => fetchQuotes(), []);
+
+  useEffect(() => {
+    loading === false && getQuote();
+  }, [loading]);
 
   const getQuote = () => {
     setLoading(true);
@@ -42,21 +47,23 @@ const QuoteCard = () => {
     setLoading(false);
   };
 
-  return loading ? (
+  return failed ? (
+    <h1 style={{ textAlign: "center" }}>Failed to reach our server. Try again later.</h1>
+  ) : loading ? (
     <Loader />
   ) : (
-    <div className='quote-card'>
-      <div className='quote-text'>
+    <div id='quote-box' className='quote-card'>
+      <div id='text' className='quote-text'>
         <h1>{quote}</h1>
       </div>
-      <div className='quote-author'>
+      <div id='author' className='quote-author'>
         <span>- {author}</span>
       </div>
       <div className='quote-card-btns'>
-        <a href={`https://twitter.com/intent/tweet?text=${quote}`} target='_blank' rel='noreferrer'>
+        <a id='tweet-quote' href={`https://twitter.com/intent/tweet?text=${quote}`} target='_blank' rel='noreferrer'>
           <Button twitter='twitter-btn' label='Post on Twitter' />
         </a>
-        <div onClick={getQuote}>
+        <div id='new-quote' onClick={getQuote}>
           <Button label='Get Quote' />
         </div>
       </div>
