@@ -1,0 +1,39 @@
+.quote-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+  width: 500px;
+  min-height: 300px;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin: 0 10px;
+
+  @media screen and (max-width: 480px) {
+    padding: 30px 10px;
+  }
+
+  .quote-text {
+    width: 100%;
+  }
+
+  .quote-author {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+    span {
+      margin-right: 50px;
+      font-size: 1.3rem;
+    }
+  }
+
+  .quote-card-btns {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15%;
+    font-weight: bold;
+  }
+}
