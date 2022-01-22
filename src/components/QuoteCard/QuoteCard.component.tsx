@@ -5,33 +5,48 @@ import "./QuoteCard.styles.scss";
 import Button from "../Button/Button.component";
 import Loader from "../Loader/Loader.component";
 
-const QuoteCard = () => {
-  const [quote, setQuote] = useState("");
-  const [author, setAuthor] = useState("");
-  const [loading, setLoading] = useState(true);
+export interface IQuotes {
+  text: string;
+  author: string;
+}
 
-  const getQuote = () => {
-    setLoading(true);
+const QuoteCard = () => {
+  const [quote, setQuote] = useState("Twitter Quote Generator!");
+  const [author, setAuthor] = useState("Try it out!");
+  const [loading, setLoading] = useState(true);
+  const [quotes, setQuotes] = useState<IQuotes[]>([]);
+
+  const fetchQuotes = () => {
     fetch("https://type.fit/api/quotes")
       .then((response) => response.json())
       .then((data) => {
-        const index: number = Math.floor(Math.random() * 1643);
-        const quote: string = data[index].text;
-        const author: string = data[index].author;
-        setQuote(quote);
-        author !== null ? setAuthor(author) : setAuthor("Unknown");
+        setQuotes(data);
         setLoading(false);
+      })
+      .catch(() => {
+        console.log("Failed to fetch quotes, retrying...");
+        fetchQuotes();
       });
   };
 
-  useEffect(() => getQuote(), []);
+  useEffect(() => fetchQuotes(), []);
+
+  const getQuote = () => {
+    setLoading(true);
+    const index: number = Math.floor(Math.random() * 1643);
+    const quote: string = quotes[index].text;
+    const author: string = quotes[index].author;
+    setQuote("“" + quote + "“");
+    author !== null ? setAuthor(author) : setAuthor("Unknown");
+    setLoading(false);
+  };
 
   return loading ? (
     <Loader />
   ) : (
     <div className='quote-card'>
       <div className='quote-text'>
-        <h1>“{quote}“</h1>
+        <h1>{quote}</h1>
       </div>
       <div className='quote-author'>
         <span>- {author}</span>
