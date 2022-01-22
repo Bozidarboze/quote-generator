@@ -29,6 +29,7 @@ const QuoteCard = () => {
       });
   };
 
+  // eslint-disable-next-line
   useEffect(() => fetchQuotes(), []);
 
   const getQuote = () => {
@@ -52,7 +53,7 @@ const QuoteCard = () => {
         <span>- {author}</span>
       </div>
       <div className='quote-card-btns'>
-        <a href={`https://twitter.com/intent/tweet?text=${quote}`} target='_blank'>
+        <a href={`https://twitter.com/intent/tweet?text=${quote}`} target='_blank' rel='noreferrer'>
           <Button twitter='twitter-btn' label='Post on Twitter' />
         </a>
         <div onClick={getQuote}>
